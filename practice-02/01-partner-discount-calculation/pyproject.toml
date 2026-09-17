@@ -1,0 +1,16 @@
+[project]
+name = "partner-discount-calculation"
+version = "0.1.0"
+description = "Partner discount calculation"
+requires-python = ">=3.9"
+
+[dependency-groups]
+dev = [
+    "pytest==8.3.5",
+    "pytest-cov==6.1.1",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+addopts = "--cov=app.discount --cov-report=term-missing --cov-fail-under=100"
