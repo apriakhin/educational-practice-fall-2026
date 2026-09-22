@@ -1,0 +1,20 @@
+[project]
+name = "partner-edit-form"
+version = "0.1.0"
+description = "Flask CRM partner registry and partner form"
+requires-python = ">=3.9"
+dependencies = [
+    "flask==3.1.1",
+    "psycopg2-binary==2.9.11",
+]
+
+[dependency-groups]
+dev = [
+    "pytest==8.3.5",
+    "pytest-cov==6.1.1",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+addopts = "--cov=app.discount --cov-report=term-missing --cov-fail-under=100"
