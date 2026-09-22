@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}CRM: Карточка партнера [Добавление]{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-12 col-xl-9">
+        <header class="mb-4">
+            <a href="{{ url_for('partner_list') }}" class="small text-decoration-none">Реестр партнеров</a>
+            <h1 class="display-6 fw-bold mt-2 mb-1">Новый партнер</h1>
+            <p class="text-body-secondary mb-0">Карточка партнера будет реализована в следующем задании.</p>
+        </header>
+        <section class="card border-0 shadow-sm">
+            <div class="card-body p-4 p-md-5">
+                <h2 class="h4">Форма пока недоступна</h2>
+                <p class="text-body-secondary mb-4">В этом задании реализованы структура страниц и безопасная навигация между ними.</p>
+                <a class="btn btn-outline-secondary" href="{{ url_for('partner_list') }}">Назад</a>
+            </div>
+        </section>
+    </div>
+</div>
+{% endblock %}
