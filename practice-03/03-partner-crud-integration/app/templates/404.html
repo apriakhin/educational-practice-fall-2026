@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}CRM: Партнер не найден{% endblock %}
+{% block content %}
+<div class="text-center py-5">
+    <p class="display-4 fw-bold text-primary mb-2">404</p>
+    <h1 class="h3">Партнер не найден</h1>
+    <p class="text-body-secondary">{{ message }}</p>
+    <a class="btn btn-primary" href="{{ url_for('partner_list') }}">Вернуться в реестр</a>
+</div>
+{% endblock %}

@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}CRM: Ошибка базы данных{% endblock %}
+{% block content %}
+<div class="alert alert-danger" role="alert">
+    <h1 class="h4 alert-heading">Ошибка подключения</h1>
+    Не удалось получить данные партнера. Проверьте подключение к PostgreSQL и повторите попытку.
+</div>
+<a class="btn btn-outline-primary" href="{{ url_for('partner_list') }}">Вернуться в реестр</a>
+{% endblock %}
