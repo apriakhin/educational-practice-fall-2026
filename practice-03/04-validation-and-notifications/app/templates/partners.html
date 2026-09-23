@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% from "_message_boxes.html" import error_modal, information_modal %}
+{% block title %}CRM: Реестр партнеров{% endblock %}
+
+{% block content %}
+<header class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 mb-4">
+    <div>
+        <h1 class="h2 mb-1">Реестр партнеров</h1>
+        <p class="text-body-secondary mb-0">Контактные данные, объем продаж и текущие скидки партнеров.</p>
+    </div>
+    <a class="btn btn-primary flex-shrink-0" href="{{ url_for('partner_create') }}">Добавить партнера</a>
+</header>
+
+{% if database_error %}
+<section class="alert alert-danger" role="alert">
+    <h2 class="h5 alert-heading">Ошибка подключения</h2>
+    Не удалось получить данные из базы. Проверьте подключение к PostgreSQL и повторите попытку.
+</section>
+{% elif not partners %}
+<section class="alert alert-secondary">Партнеры пока не добавлены.</section>
+{% else %}
+<section class="row g-4" aria-label="Партнеры">
+    {% for partner in partners %}
+    <div class="col-12 col-lg-6">
+        <article class="card h-100 shadow-sm position-relative">
+            <div class="card-header d-flex justify-content-between align-items-center gap-3">
+                <h2 class="h5 mb-0"><a class="stretched-link text-reset text-decoration-none" href="{{ url_for('partner_edit', partner_id=partner.id) }}" aria-label="Редактировать {{ partner.name }}">{{ partner.partner_type }} | {{ partner.name }}</a></h2>
+                <span class="badge text-bg-primary fs-6">{{ partner.discount }}%</span>
+            </div>
+            <div class="card-body">
+                <dl class="row mb-0">
+                    <dt class="col-sm-4">Директор</dt><dd class="col-sm-8">{{ partner.director_name }}</dd>
+                    <dt class="col-sm-4">Адрес</dt><dd class="col-sm-8">{{ partner.address }}</dd>
+                    <dt class="col-sm-4">Телефон</dt><dd class="col-sm-8">{{ partner.phone or "Не указан" }}</dd>
+                    <dt class="col-sm-4">Email</dt><dd class="col-sm-8 text-break">{{ partner.email }}</dd>
+                    <dt class="col-sm-4">Рейтинг</dt><dd class="col-sm-8">{{ partner.rating }}</dd>
+                </dl>
+            </div>
+            <div class="card-footer text-body-secondary">
+                Объем продаж: <span class="badge text-bg-secondary">{{ "{:,}".format(partner.total_quantity).replace(",", " ") }} ед.</span>
+            </div>
+        </article>
+    </div>
+    {% endfor %}
+</section>
+{% endif %}
+{% endblock %}
+
+{% block modals %}
+{% if database_error %}{{ error_modal(database_error) }}{% endif %}
+{% with messages = get_flashed_messages(category_filter=['information']) %}
+    {% if messages %}{{ information_modal(messages[0]) }}{% endif %}
+{% endwith %}
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/message-boxes.js') }}"></script>
+{% endblock %}

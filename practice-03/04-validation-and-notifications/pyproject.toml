@@ -1,0 +1,20 @@
+[project]
+name = "partner-crm-validation"
+version = "0.1.0"
+description = "Flask CRM with partner validation and MessageBox notifications"
+requires-python = ">=3.9"
+dependencies = [
+    "flask==3.1.1",
+    "psycopg2-binary==2.9.11",
+]
+
+[dependency-groups]
+dev = [
+    "pytest==8.3.5",
+    "pytest-cov==6.1.1",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+addopts = "--cov=app --cov=run --cov-report=term-missing"

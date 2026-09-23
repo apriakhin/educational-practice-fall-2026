@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% from "_message_boxes.html" import error_modal %}
+{% block title %}CRM: Партнер не найден{% endblock %}
+
+{% block content %}
+<section class="card shadow-sm text-center p-5">
+    <h1 class="h3">Партнер не найден</h1>
+    <p class="text-body-secondary">{{ message }}</p>
+    <a class="btn btn-primary align-self-center" href="{{ url_for('partner_list') }}">Вернуться в реестр</a>
+</section>
+{% endblock %}
+
+{% block modals %}
+{{ error_modal(message ~ ' Вернитесь в реестр и выберите существующего партнера.') }}
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/message-boxes.js') }}"></script>
+{% endblock %}
