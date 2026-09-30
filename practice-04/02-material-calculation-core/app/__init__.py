@@ -1,0 +1,1 @@
+"""Partner CRM application package."""
