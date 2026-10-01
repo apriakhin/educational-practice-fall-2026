@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% from "_message_boxes.html" import error_modal, warning_modal, information_modal %}
+{% set is_create = mode == 'create' %}
+{% block title %}CRM: Карточка партнера [{{ 'Добавление' if is_create else 'Редактирование' }}]{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-12 col-xl-9">
+        <header class="mb-4">
+            <a href="{{ url_for('partner_list') }}" class="small text-decoration-none" data-cancel-navigation>Реестр партнеров</a>
+            <h1 class="display-6 fw-bold mt-2 mb-1">{{ 'Новый партнер' if is_create else 'Карточка партнера' }}</h1>
+            <p class="text-body-secondary mb-0">Поля со знаком * обязательны для заполнения.</p>
+        </header>
+
+        <form id="partnerForm" method="post" class="card border-0 shadow-sm" novalidate data-cancel-url="{{ url_for('partner_list') }}">
+            <div class="card-body p-4 p-md-5">
+                <div class="row g-4">
+                    <div class="col-md-8">
+                        <label class="form-label" for="name">Наименование *</label>
+                        <input class="form-control{% if errors.name %} is-invalid{% endif %}" id="name" name="name" maxlength="255" required value="{{ partner.name|default('') }}" placeholder="Например, Логистик-Экспресс" title="Введите официальное наименование, до 255 символов" data-bs-toggle="tooltip">
+                        {% if errors.name %}<div class="invalid-feedback">{{ errors.name }}</div>{% endif %}
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label" for="partner_type">Тип партнера *</label>
+                        <select class="form-select{% if errors.partner_type %} is-invalid{% endif %}" id="partner_type" name="partner_type" required title="Выберите организационно-правовую форму" data-bs-toggle="tooltip">
+                            <option value="">Выберите тип</option>
+                            {% for partner_type in partner_types %}<option value="{{ partner_type }}"{% if partner.partner_type == partner_type %} selected{% endif %}>{{ partner_type }}</option>{% endfor %}
+                        </select>
+                        {% if errors.partner_type %}<div class="invalid-feedback">{{ errors.partner_type }}</div>{% endif %}
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label" for="rating">Рейтинг *</label>
+                        <input class="form-control{% if errors.rating %} is-invalid{% endif %}" id="rating" name="rating" type="number" min="0" step="1" inputmode="numeric" required value="{{ partner.rating|default('') }}" placeholder="0" title="Введите целое неотрицательное число" data-bs-toggle="tooltip">
+                        {% if errors.rating %}<div class="invalid-feedback">{{ errors.rating }}</div>{% endif %}
+                    </div>
+                    <div class="col-md-8">
+                        <label class="form-label" for="director_name">ФИО директора *</label>
+                        <input class="form-control{% if errors.director_name %} is-invalid{% endif %}" id="director_name" name="director_name" maxlength="255" required value="{{ partner.director_name|default('') }}" placeholder="Иванов Иван Иванович" title="Введите ФИО руководителя, до 255 символов" data-bs-toggle="tooltip">
+                        {% if errors.director_name %}<div class="invalid-feedback">{{ errors.director_name }}</div>{% endif %}
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label" for="address">Адрес *</label>
+                        <input class="form-control{% if errors.address %} is-invalid{% endif %}" id="address" name="address" maxlength="500" required value="{{ partner.address|default('') }}" placeholder="г. Москва, ул. Примерная, д. 1" title="Введите полный почтовый адрес, до 500 символов" data-bs-toggle="tooltip">
+                        {% if errors.address %}<div class="invalid-feedback">{{ errors.address }}</div>{% endif %}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="phone">Телефон</label>
+                        <input class="form-control{% if errors.phone %} is-invalid{% endif %}" id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="18" pattern="\+7 \([0-9]{3}\) [0-9]{3}-[0-9]{2}-[0-9]{2}" data-phone-mask value="{{ partner.phone|default('', true) }}" placeholder="+7 (999) 000-00-00" title="Введите телефон в формате +7 (999) 000-00-00" data-bs-toggle="tooltip">
+                        {% if errors.phone %}<div class="invalid-feedback">{{ errors.phone }}</div>{% endif %}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="email">Email *</label>
+                        <input class="form-control{% if errors.email %} is-invalid{% endif %}" id="email" name="email" type="email" maxlength="255" required value="{{ partner.email|default('') }}" placeholder="partner@example.com" title="Введите уникальный email в формате name@example.com" data-bs-toggle="tooltip">
+                        {% if errors.email %}<div class="invalid-feedback">{{ errors.email }}</div>{% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer bg-white border-0 d-flex flex-column-reverse flex-sm-row justify-content-end gap-2 p-4 pt-0">
+                <button class="btn btn-outline-secondary" type="button" data-cancel-navigation>Назад</button>
+                <button class="btn btn-primary" type="submit">{{ 'Добавить партнера' if is_create else 'Сохранить изменения' }}</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block modals %}
+{% if errors %}{{ error_modal('Форма содержит некорректные данные.', errors) }}{% elif database_error %}{{ error_modal(database_error) }}{% endif %}
+{{ warning_modal() }}
+{% with messages = get_flashed_messages(category_filter=['information']) %}
+    {% if messages %}{{ information_modal(messages[0]) }}{% endif %}
+{% endwith %}
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/message-boxes.js') }}"></script>
+<script src="{{ url_for('static', filename='js/partner-form.js') }}"></script>
+{% endblock %}

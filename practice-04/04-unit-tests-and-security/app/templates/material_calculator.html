@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}CRM: Калькулятор материалов{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-12 col-xl-9">
+        <header class="mb-4">
+            <a href="{{ url_for('partner_list') }}" class="small text-decoration-none">Реестр партнеров</a>
+            <h1 class="display-6 fw-bold mt-2 mb-1">Калькулятор материалов</h1>
+            <p class="text-body-secondary mb-0">Рассчитайте расход сырья с учетом брака.</p>
+        </header>
+        <form method="post" class="card border-0 shadow-sm" novalidate>
+            <div class="card-body p-4 p-md-5">
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <label class="form-label" for="product_type_id">Тип продукции</label>
+                        <select class="form-select" id="product_type_id" name="product_type_id" required>
+                            <option value="">Выберите тип</option>
+                            <option value="1"{% if values.product_type_id == '1' %} selected{% endif %}>Стандартный (× 1,00)</option>
+                            <option value="2"{% if values.product_type_id == '2' %} selected{% endif %}>Усиленный (× 1,25)</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="material_type_id">Тип материала</label>
+                        <select class="form-select" id="material_type_id" name="material_type_id" required>
+                            <option value="">Выберите тип</option>
+                            <option value="1"{% if values.material_type_id == '1' %} selected{% endif %}>Без брака (0%)</option>
+                            <option value="2"{% if values.material_type_id == '2' %} selected{% endif %}>С учетом брака (5%)</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label" for="quantity">Количество продукции (шт.)</label>
+                        <input class="form-control" id="quantity" name="quantity" type="number" min="1" step="1" required value="{{ values.quantity|default('') }}">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label" for="param_1">Параметр 1</label>
+                        <input class="form-control" id="param_1" name="param_1" type="number" min="0" step="any" required value="{{ values.param_1|default('') }}">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label" for="param_2">Параметр 2</label>
+                        <input class="form-control" id="param_2" name="param_2" type="number" min="0" step="any" required value="{{ values.param_2|default('') }}">
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer bg-white border-0 d-flex justify-content-end p-4 pt-0">
+                <button class="btn btn-primary" type="submit">Рассчитать</button>
+            </div>
+        </form>
+        {% if error %}<div class="alert alert-danger mt-4" role="alert">{{ error }}</div>{% endif %}
+        {% if result is not none %}<div class="alert alert-success mt-4" role="status">Необходимое количество материала: <strong>{{ result }}</strong> ед.</div>{% endif %}
+    </div>
+</div>
+{% endblock %}
