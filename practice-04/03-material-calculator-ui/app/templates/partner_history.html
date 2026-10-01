@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}CRM: История реализации продукции — {{ partner.name if partner else 'Ошибка загрузки' }}{% endblock %}
+
+{% block content %}
+<header class="mb-4">
+    <a href="{{ url_for('partner_list') }}" class="small text-decoration-none">Реестр партнеров</a>
+    <h1 class="display-6 fw-bold mt-2 mb-1">История реализации продукции{% if partner %} — {{ partner.name }}{% endif %}</h1>
+</header>
+{% if database_error %}
+<div class="alert alert-danger" role="alert">Не удалось загрузить историю продаж. Проверьте подключение к PostgreSQL и повторите попытку.</div>
+{% elif not sales %}
+<div class="alert alert-secondary">Продаж этому партнеру пока нет.</div>
+{% else %}
+<div class="card border-0 shadow-sm">
+    <div class="table-responsive">
+        <table class="table table-striped mb-0">
+            <thead><tr><th scope="col">Наименование продукции</th><th scope="col">Количество (шт.)</th><th scope="col">Дата продажи</th></tr></thead>
+            <tbody>
+                {% for sale in sales %}
+                <tr><td>{{ sale.product_name }}</td><td>{{ sale.quantity }}</td><td>{{ sale.sale_date.strftime('%d.%m.%Y') }}</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
